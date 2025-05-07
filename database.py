@@ -8,7 +8,7 @@ GET_ALL_BEANS = "SELECT * FROM beans;"
 GET_BEANS_BY_NAME = "SELECT * FROM beans WHERE name = ?;"
 GET_BEST_PREPARATION_FOR_BEAN = """
 SELECT * FROM beans
-WHERE name = ?
+WHERE LOWER(name) = LOWER(?)
 ORDER BY rating DESC
 LIMIT 1;
 """
