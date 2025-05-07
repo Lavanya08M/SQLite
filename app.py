@@ -1,5 +1,7 @@
+# import the database module to handle data storage and retrieval
 import database
 
+# Menu prompt for user interaction
 MENU_PROMPT = """ -- Coffee Bean App --
 
 Choose an option:
@@ -12,10 +14,12 @@ Choose an option:
 
 Your Choice:"""
 
+# Main menu loop
 def menu():
-    connection = database.connect()
-    database.create_tables(connection)
+    connection = database.connect() # Connect to the SQLite database
+    database.create_tables(connection) # Ensure the beans table exists
 
+    # Keep prompting the user until the user choose to exit
     while (user_input := input(MENU_PROMPT)) != "5":
         if user_input == "1":
             prompt_add_new_bean(connection)
@@ -29,7 +33,7 @@ def menu():
             print("Invalid input, please try again!")
 
 
-
+# Add a new bean entry from user input
 def prompt_add_new_bean(connection):
     name = input("Enter bean name: ").strip().title()
     method = input("Enter how you've prepared it: ").strip().title()
@@ -45,19 +49,22 @@ def prompt_add_new_bean(connection):
 
     database.add_bean(connection, name, method, rating)
 
+# Display all bean entries
 def prompt_see_all_beans(connection):
     beans = database.get_all_beans(connection)
 
     for bean in beans:
         print(f"{bean[1]} {bean[2]} - {bean[3]/100:.2f}")
 
+# Search and display all records of a specific bean name
 def prompt_find_bean(connection):
     name = input("Enter bean name to find: ").strip().title()
     beans = database.get_beans_by_name(connection, name)
 
     for bean in beans:
-        print(f"{bean[1]} {bean[2]} - {bean[3]/100}")
+        print(f"{bean[1]} {bean[2]} - {bean[3]/100:.2f}")
 
+# Show the highest rated preparation method for a given bean
 def prompt_find_best_method(connection):
     name = input("Enter bean name to find: ")
     best_method = database.get_best_preparation_for_bean(connection, name)
@@ -65,7 +72,5 @@ def prompt_find_best_method(connection):
     print(f"The best preparation method for {name} is: {best_method[2]}")
 
 
-
-
-
+# start the app
 menu()
